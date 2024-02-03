@@ -1,0 +1,90 @@
+[gd_scene load_steps=4 format=3 uid="uid://ciilr46ko6j86"]
+
+[ext_resource type="Texture2D" uid="uid://b1fcrrlybghh1" path="res://Assets/bg/bg.png" id="1_tghrd"]
+[ext_resource type="Texture2D" uid="uid://canl1b237kp0r" path="res://Assets/bg/bg2.png" id="1_u423h"]
+
+[sub_resource type="GDScript" id="GDScript_0ftb2"]
+script/source = "extends Control
+
+
+
+func _on_button_pressed():
+	get_tree().change_scene_to_file(\"res://Scenes/UI/menu.tscn\")
+
+
+func _on_train_pressed():
+	get_tree().change_scene_to_file(\"res://Scenes/Levels/training.tscn\")
+
+
+func _on_level_1_pressed():
+	pass # Replace with function body.
+
+
+func _on_level_2_pressed():
+	pass # Replace with function body.
+"
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_0ftb2")
+
+[node name="BGs" type="Node" parent="."]
+process_priority = -1
+
+[node name="Bg2" type="Sprite2D" parent="BGs"]
+position = Vector2(1743, 324)
+scale = Vector2(1.14, 1.14)
+texture = ExtResource("1_u423h")
+
+[node name="Bg" type="Sprite2D" parent="BGs"]
+z_index = -1
+position = Vector2(586, 325)
+scale = Vector2(1.14, 1.14)
+texture = ExtResource("1_tghrd")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_direction = 1
+layout_mode = 0
+offset_left = 275.0
+offset_top = 184.0
+offset_right = 842.0
+offset_bottom = 330.0
+alignment = 1
+
+[node name="Train" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Training 
+level"
+metadata/_edit_lock_ = true
+
+[node name="Level1" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Level 1"
+metadata/_edit_lock_ = true
+
+[node name="Level2" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Level 2"
+metadata/_edit_lock_ = true
+
+[node name="exit" type="Button" parent="."]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 590.0
+offset_right = 208.0
+offset_bottom = 640.0
+theme_override_font_sizes/font_size = 30
+text = "Back to Menu"
+
+[connection signal="pressed" from="HBoxContainer/Train" to="." method="_on_train_pressed"]
+[connection signal="pressed" from="HBoxContainer/Level1" to="." method="_on_level_1_pressed"]
+[connection signal="pressed" from="HBoxContainer/Level2" to="." method="_on_level_2_pressed"]
+[connection signal="pressed" from="exit" to="." method="_on_button_pressed"]

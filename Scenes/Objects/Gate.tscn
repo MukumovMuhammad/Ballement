@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=3 uid="uid://b4xuc4u4gvxrq"]
+
+[ext_resource type="Texture2D" uid="uid://vqpuyg8w51wa" path="res://Assets/shape-character/PNG/Double/tile_grey.png" id="1_rx0ff"]
+
+[sub_resource type="GDScript" id="GDScript_scc8o"]
+script/source = "extends StaticBody2D
+
+
+@export var Move_to_pos : Vector2 = Vector2.ZERO 
+@export var speed = 100
+@onready var close_pos : Vector2 = self.global_position
+var open_pos : Vector2 = Vector2.ZERO
+@export var is_open : bool
+func _ready():
+	open_pos = close_pos + Move_to_pos
+
+func open(delta):
+	if self.global_position != open_pos:
+		self.global_position = self.global_position.move_toward(open_pos, delta * speed)
+func close(delta):
+	if self.global_position != close_pos:
+		self.global_position = self.global_position.move_toward(close_pos, delta * speed)
+
+func _process(delta):
+	if is_open:
+		open(delta)
+	else:
+		close(delta)
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hsv3p"]
+size = Vector2(30, 70)
+
+[node name="Gate" type="StaticBody2D"]
+position = Vector2(-11.6985, -0.712315)
+rotation = -0.00281691
+collision_layer = 2
+collision_mask = 6
+script = SubResource("GDScript_scc8o")
+
+[node name="TileGrey" type="Sprite2D" parent="."]
+position = Vector2(8.69364, 1.73682)
+rotation = 0.00281691
+scale = Vector2(1.265, 1.265)
+texture = ExtResource("1_rx0ff")
+flip_h = true
+hframes = 5
+frame = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(4.67854, 1.72198)
+scale = Vector2(1, 2.78889)
+shape = SubResource("RectangleShape2D_hsv3p")

@@ -1,0 +1,118 @@
+[gd_scene load_steps=8 format=3 uid="uid://t7pir7kmi5a2"]
+
+[ext_resource type="Texture2D" uid="uid://vqpuyg8w51wa" path="res://Assets/shape-character/PNG/Double/tile_grey.png" id="1_rj331"]
+
+[sub_resource type="GDScript" id="GDScript_vfswd"]
+script/source = "extends Path2D
+
+@onready var path_follow_2d = $PathFollow2D
+@onready var animation_player = $AnimationPlayer
+@export var current_d : float
+
+func _ready():
+	close()
+
+func open():
+	current_d = path_follow_2d.progress_ratio
+	animation_player.play(\"open\")
+		
+
+func close():
+	current_d = path_follow_2d.progress_ratio
+	animation_player.play(\"close\")
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p1jpq"]
+size = Vector2(30, 70)
+
+[sub_resource type="Animation" id="Animation_yvy6o"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PathFollow2D:progress_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_s07ch"]
+resource_name = "close"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PathFollow2D:progress_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_gmwqw"]
+resource_name = "open"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PathFollow2D:progress_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3p4ie"]
+_data = {
+"RESET": SubResource("Animation_yvy6o"),
+"close": SubResource("Animation_s07ch"),
+"open": SubResource("Animation_gmwqw")
+}
+
+[node name="Gates" type="Path2D"]
+script = SubResource("GDScript_vfswd")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="."]
+position = Vector2(2, 67)
+rotates = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="PathFollow2D"]
+position = Vector2(-11.6985, -0.712315)
+rotation = -0.00281691
+collision_layer = 2
+collision_mask = 6
+
+[node name="TileGrey" type="Sprite2D" parent="PathFollow2D/StaticBody2D"]
+position = Vector2(8.69364, 1.73682)
+rotation = 0.00281691
+scale = Vector2(1.265, 1.265)
+texture = ExtResource("1_rj331")
+flip_h = true
+hframes = 5
+frame = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PathFollow2D/StaticBody2D"]
+position = Vector2(4.67854, 1.72198)
+scale = Vector2(1, 2.78889)
+shape = SubResource("RectangleShape2D_p1jpq")
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
+position = Vector2(2, 67)
+remote_path = NodePath("../PathFollow2D")
+use_global_coordinates = false
+update_scale = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_3p4ie")
+}

@@ -1,0 +1,149 @@
+[gd_scene load_steps=12 format=3 uid="uid://gjevnm2gt3nf"]
+
+[ext_resource type="Script" path="res://Scenes/Player/player.gd" id="1_froci"]
+[ext_resource type="Texture2D" uid="uid://cyli5dca5cl6p" path="res://Assets/Spritesheet/earth.png" id="3_o8715"]
+[ext_resource type="Texture2D" uid="uid://bqdkovqejbry6" path="res://Assets/Spritesheet/fire.png" id="4_agru1"]
+[ext_resource type="Texture2D" uid="uid://bamm1lo61cpeg" path="res://Assets/Spritesheet/simple.png" id="5_48h5d"]
+[ext_resource type="Texture2D" uid="uid://ioa4cpme3w26" path="res://Assets/Spritesheet/water.png" id="5_54mby"]
+[ext_resource type="Texture2D" uid="uid://s1y2t84oxsm6" path="res://Assets/shape-character/PNG/Double/face_a.png" id="7_vokdd"]
+[ext_resource type="PackedScene" uid="uid://c4cr5rirmbq70" path="res://Scenes/Player/spray.tscn" id="8_ggp7c"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ebm72"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_o8715")
+}],
+"loop": true,
+"name": &"earth",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_agru1")
+}],
+"loop": true,
+"name": &"fire",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_48h5d")
+}],
+"loop": false,
+"name": &"simple",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_54mby")
+}],
+"loop": true,
+"name": &"water",
+"speed": 7.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qj64k"]
+radius = 24.0208
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l5lxb"]
+radius = 28.0179
+
+[sub_resource type="GDScript" id="GDScript_v48ow"]
+script/source = "extends Sprite2D
+
+
+var Faces = {
+	\"simple\" : preload(\"res://Assets/shape-character/PNG/Double/face_a.png\"),
+	\"fire\" : preload(\"res://Assets/shape-character/PNG/Double/face_g.png\"),
+	\"water\" : preload(\"res://Assets/shape-character/PNG/Double/face_h.png\"),
+	\"earth\" : preload(\"res://Assets/shape-character/PNG/Double/face_b.png\")
+} 
+
+
+
+func _on_player_state_changed(state):
+	texture = Faces[state]
+"
+
+[node name="Player" type="CharacterBody2D" groups=["Elemental", "portble"]]
+collision_layer = 4
+collision_mask = 14
+floor_block_on_wall = false
+script = ExtResource("1_froci")
+Normal_speed = {
+"earth": 300.0,
+"fire": 800.0,
+"simple": 500.0,
+"water": 600.0
+}
+jump_velocity = {
+"earth": -700.0,
+"fire": -1050.0,
+"simple": -950.0,
+"water": -900.0
+}
+Push_forse = {
+"earth": 60.0,
+"fire": 15.0,
+"simple": 20.0,
+"water": 20.0
+}
+
+[node name="spray" parent="." instance=ExtResource("8_ggp7c")]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 2
+rotation = 0.785398
+scale = Vector2(0.18, 0.18)
+sprite_frames = SubResource("SpriteFrames_ebm72")
+animation = &"water"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_qj64k")
+
+[node name="Dashing_time" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="Dashing_cooldown" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="Ability_timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_l5lxb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("7_vokdd")
+script = SubResource("GDScript_v48ow")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -21.0
+offset_top = -53.0
+offset_right = 19.0
+offset_bottom = -30.0
+
+[node name="Coyote_timer" type="Timer" parent="."]
+
+[node name="Energy_timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="State_changed" from="." to="Sprite2D" method="_on_player_state_changed"]
+[connection signal="timeout" from="Dashing_time" to="." method="_on_dashing_time_timeout"]
+[connection signal="timeout" from="Dashing_cooldown" to="." method="_on_dashing_cooldown_timeout"]
+[connection signal="timeout" from="Ability_timer" to="." method="_on_ability_timer_timeout"]
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_exited" from="Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="timeout" from="Coyote_timer" to="." method="_on_coyote_timer_timeout"]
+[connection signal="timeout" from="Energy_timer" to="." method="_on_energy_timer_timeout"]

@@ -1,0 +1,74 @@
+[gd_scene load_steps=4 format=3 uid="uid://crdajgibhq8o7"]
+
+[ext_resource type="Texture2D" uid="uid://basqak6o15bca" path="res://Assets/UI/watermachine.png" id="1_dxusr"]
+
+[sub_resource type="GDScript" id="GDScript_3jk28"]
+script/source = "extends Area2D
+@onready var cpu = $cpu
+
+@onready var sprite = $ForMachine
+
+
+@export var Element_to_change : String
+
+@export var particle_color : Dictionary ={
+	\"water\" : Color(0.753, 0.271, 0.251),
+	\"fire\" : Color(0.753, 0.271, 0.251),
+	\"earth\" : Color(0.753, 0.271, 0.251)
+}
+
+var machines_sprite : Dictionary ={
+	\"water\" : preload(\"res://Assets/UI/watermachine.png\"),
+	\"fire\" : preload(\"res://Assets/UI/FireMachine.png\"),
+	\"earth\" : preload(\"res://Assets/UI/FireMachine.png\")
+}
+
+var machines_scale : Dictionary = {
+	\"water\" : Vector2(0.4, 0.4),
+	\"fire\" : Vector2(0.2, 0.2),
+	\"earth\" : Vector2(0.2, 0.2)
+}
+func _ready():
+	sprite.texture = machines_sprite[Element_to_change]
+	cpu.color = particle_color[Element_to_change]
+	cpu.emitting = true
+
+func _on_body_entered(body):
+	if body.is_in_group(\"Elemental\"):
+		body.Change_state(Element_to_change)
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ywn3h"]
+size = Vector2(123, 144)
+
+[node name="Elemenchangert_" type="Area2D"]
+script = SubResource("GDScript_3jk28")
+Element_to_change = "fire"
+particle_color = {
+"earth": Color(0.141176, 0.227451, 0.184314, 1),
+"fire": Color(0.753, 0.271, 0.251, 1),
+"water": Color(0.403922, 0.352941, 0.901961, 1)
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(101.5, 66)
+shape = SubResource("RectangleShape2D_ywn3h")
+
+[node name="cpu" type="CPUParticles2D" parent="."]
+position = Vector2(100, 148)
+emitting = false
+lifetime = 0.5
+speed_scale = 0.3
+emission_shape = 3
+emission_rect_extents = Vector2(100, 1)
+gravity = Vector2(0, -1000)
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+color = Color(0.752941, 0.270588, 0.25098, 1)
+
+[node name="ForMachine" type="Sprite2D" parent="."]
+position = Vector2(100, 65)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("1_dxusr")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

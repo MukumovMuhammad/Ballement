@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://oii1oihceqpu"]
+
+[ext_resource type="Script" path="res://Scenes/Objects/element_cube.gd" id="1_bdwod"]
+[ext_resource type="PackedScene" uid="uid://c4cr5rirmbq70" path="res://Scenes/Player/spray.tscn" id="3_na7a2"]
+[ext_resource type="Texture2D" uid="uid://0jgnupe2c0y4" path="res://Assets/Spritesheet/kandinsky-download-1706615106444.png" id="3_uv7k8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kktjj"]
+radius = 26.3059
+
+[node name="Element_cube" type="RigidBody2D" groups=["Elemental", "portble", "rigid"]]
+collision_layer = 2
+collision_mask = 7
+lock_rotation = true
+script = ExtResource("1_bdwod")
+first_state = "water"
+Masses = {
+"earth": 4.0,
+"fire": 2.0,
+"water": 2.5
+}
+
+[node name="spray" parent="." instance=ExtResource("3_na7a2")]
+position = Vector2(27, 25)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(27, 26)
+scale = Vector2(0.048, 0.048)
+texture = ExtResource("3_uv7k8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(27, 26)
+shape = SubResource("CircleShape2D_kktjj")

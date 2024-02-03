@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpek5ymeiwqen"]
+
+[sub_resource type="GDScript" id="GDScript_q3phl"]
+script/source = "extends Area2D
+
+@export var open_skils : Dictionary = {\"water\" : false, \"fire\" : false, \"earth\" : false}
+
+func _ready():
+	for i in open_skils:
+		if open_skils[i]:
+			print(i)
+
+func _on_body_entered(body):
+	if body.name == \"Player\":
+		for i in open_skils:
+			if open_skils[i]:
+				body.Abilities_opened[i] = open_skils[i]
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ddllg"]
+size = Vector2(77, 69)
+
+[node name="open_abilities" type="Area2D"]
+collision_mask = 4
+script = SubResource("GDScript_q3phl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(28.5, 24.5)
+shape = SubResource("RectangleShape2D_ddllg")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

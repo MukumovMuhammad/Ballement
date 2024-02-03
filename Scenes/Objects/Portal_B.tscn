@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://bukm26gbu55rx"]
+
+[ext_resource type="Texture2D" uid="uid://dc6wso8fwrmi0" path="res://Assets/sprite-sheets/portalsSpriteSheet.png" id="1_1i1o3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_22ivh"]
+atlas = ExtResource("1_1i1o3")
+region = Rect2(0, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_svdvl"]
+atlas = ExtResource("1_1i1o3")
+region = Rect2(32, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7cw0u"]
+atlas = ExtResource("1_1i1o3")
+region = Rect2(64, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6yc7i"]
+atlas = ExtResource("1_1i1o3")
+region = Rect2(96, 0, 32, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x557q"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_22ivh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_svdvl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7cw0u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6yc7i")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="Portal_B" type="AnimatedSprite2D"]
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_x557q")
+animation = &"idle"
+autoplay = "idle"

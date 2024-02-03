@@ -1,0 +1,69 @@
+[gd_scene load_steps=3 format=3 uid="uid://muje0v204tn3"]
+
+[sub_resource type="GDScript" id="GDScript_i881t"]
+script/source = "extends Area2D
+
+@onready var cpu_particles_2d : CPUParticles2D = $CPUParticles2D
+
+@export_category(\"Particle\")
+@export var time : float = 0.65
+@export var Amount : int = 10
+
+@export_category(\"For bodies entered\")
+@export var Velocity_forse : Vector2 = Vector2.ZERO
+@export var Push_forse : float = 30.0
+func _ready():
+	cpu_particles_2d.lifetime = time
+	cpu_particles_2d.amount = Amount
+	cpu_particles_2d.emitting = true
+
+func _on_body_entered(body):
+	if body.is_in_group(\"portble\"):
+		print(\"Forsing this \" , body , \"to go up\")
+		
+		if body.is_in_group(\"rigid\"):
+			#body.apply_central_impulse(Velocity_forse * Vector2(10, 10))
+					#c.get_collider().apply_central_impulse(-c.get_normal() * Push_forse)
+			body.Wind_forse = Velocity_forse
+			body.going_up = true
+		elif body.has_method(\"is_on_floor\"):
+			body.going_up = true
+			body.Veclociting_wind = Velocity_forse
+
+
+
+
+func _on_body_exited(body):
+	if body.is_in_group(\"portble\"):
+		
+		if body.is_in_group(\"rigid\"):
+			body.going_up = false
+		
+		if body.has_method(\"is_on_floor\"):
+			body.going_up = false
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_17v7n"]
+size = Vector2(126, 108)
+
+[node name="Wind_area" type="Area2D"]
+collision_layer = 2
+collision_mask = 6
+script = SubResource("GDScript_i881t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2, -54)
+shape = SubResource("RectangleShape2D_17v7n")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+emitting = false
+lifetime = 0.65
+emission_shape = 3
+emission_rect_extents = Vector2(65, 1)
+gravity = Vector2(0, -500)
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+color = Color(0.25098, 0.52549, 0.478431, 1)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

@@ -1,0 +1,46 @@
+[gd_scene load_steps=4 format=3 uid="uid://dgsofmcdys46x"]
+
+[ext_resource type="Texture2D" uid="uid://b6ug0j4113oat" path="res://Assets/Lands/—Pngtree—seamless fire flame_4766715.png" id="1_gx0t1"]
+
+[sub_resource type="GDScript" id="GDScript_q4t38"]
+script/source = "extends Element_state
+
+@export var state : String = \"fire\"
+@onready var sprite_2d = $Sprite2D
+var States_num : Dictionary = {
+	\"water\" : 1,
+	\"fire\" : 2,
+	\"earth\" : 3
+}
+
+var Element_texture : Dictionary = {
+	\"water\" : preload(\"res://Assets/shape-character/PNG/Double/blue_body_square.png\"),
+	\"fire\" : preload(\"res://Assets/Lands/—Pngtree—seamless fire flame_4766715.png\"),
+	\"earth\" : preload(\"res://Assets/shape-character/PNG/Double/purple_body_square.png\")
+}
+
+
+
+func _ready():
+	Change_state(States_num[state])
+	sprite_2d.texture = Element_texture[state]
+	
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m401x"]
+size = Vector2(1934, 51.5)
+
+[node name="Lands" type="StaticBody2D" groups=["Elemental"]]
+scale = Vector2(0.5, 0.5)
+collision_layer = 10
+collision_mask = 6
+script = SubResource("GDScript_q4t38")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(15, 128)
+shape = SubResource("RectangleShape2D_m401x")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(6, -32)
+texture = ExtResource("1_gx0t1")
+vframes = 7

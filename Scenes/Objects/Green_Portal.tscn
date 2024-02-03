@@ -1,0 +1,77 @@
+[gd_scene load_steps=9 format=3 uid="uid://c76um62yped7q"]
+
+[ext_resource type="Texture2D" uid="uid://dc6wso8fwrmi0" path="res://Assets/sprite-sheets/portalsSpriteSheet.png" id="1_yf6qd"]
+
+[sub_resource type="GDScript" id="GDScript_q2oht"]
+script/source = "extends Area2D
+
+#signal complete_level
+
+@export var Next_Level : PackedScene
+
+func _ready():
+	print(\"Here is the next level , \" , Next_Level)
+
+func _on_body_entered(body):
+	if body.name == \"Player\":
+		get_tree().change_scene_to_packed(Next_Level)
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2j0rc"]
+radius = 38.0
+height = 126.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0vkuc"]
+atlas = ExtResource("1_yf6qd")
+region = Rect2(0, 144, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uptec"]
+atlas = ExtResource("1_yf6qd")
+region = Rect2(32, 144, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_51es0"]
+atlas = ExtResource("1_yf6qd")
+region = Rect2(64, 144, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mys7v"]
+atlas = ExtResource("1_yf6qd")
+region = Rect2(96, 144, 32, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c0tjj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0vkuc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uptec")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_51es0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mys7v")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="Green_Portal" type="Area2D"]
+collision_layer = 2
+collision_mask = 4
+script = SubResource("GDScript_q2oht")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_2j0rc")
+metadata/_edit_lock_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+modulate = Color(0, 1, 0, 1)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_c0tjj")
+animation = &"idle"
+autoplay = "idle"
+metadata/_edit_lock_ = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

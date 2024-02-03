@@ -1,0 +1,57 @@
+[gd_scene load_steps=3 format=3 uid="uid://dcilb08pt0n80"]
+
+[ext_resource type="Texture2D" uid="uid://cw2sgdbo6dutt" path="res://Assets/bg/craftpix-402033-free-horizontal-2d-game-backgrounds/PNG/game_background_3/game_background_3. 2.png" id="1_2ebj7"]
+
+[sub_resource type="GDScript" id="GDScript_d16tg"]
+script/source = "extends Control
+
+@onready var counter = $CanvasGroup/counter
+
+@export var SceneLoad : String
+var scene_load_status = 0
+var progress = []
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	ResourceLoader.load_threaded_request(SceneLoad)
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	scene_load_status = ResourceLoader.load_threaded_get_status(SceneLoad, progress)
+	counter.text = str(floor(progress[0] * 100)) + \"%\"
+	if scene_load_status == ResourceLoader.THREAD_LOAD_LOADED:
+		var newScene = ResourceLoader.load_threaded_get(SceneLoad)
+		get_tree().change_scene_to_file(SceneLoad)
+"
+
+[node name="LoadingScene" type="Control"]
+top_level = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(576, 324)
+script = SubResource("GDScript_d16tg")
+
+[node name="CanvasGroup" type="CanvasLayer" parent="."]
+
+[node name="GameBackground3_2" type="Sprite2D" parent="CanvasGroup"]
+position = Vector2(863, 478)
+texture = ExtResource("1_2ebj7")
+
+[node name="counter" type="Label" parent="CanvasGroup"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.0
+offset_top = -80.0
+offset_right = 78.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "0%"

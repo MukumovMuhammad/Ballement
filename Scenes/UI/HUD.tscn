@@ -1,0 +1,141 @@
+[gd_scene load_steps=5 format=3 uid="uid://c5gdgdly50q2g"]
+
+[ext_resource type="Script" path="res://Scenes/UI/HUD.gd" id="1_j2j1p"]
+[ext_resource type="Texture2D" uid="uid://b1arrissxlc2u" path="res://Assets/UI/pause.png" id="2_1m1og"]
+[ext_resource type="Texture2D" uid="uid://yjuorakim8on" path="res://Assets/UI/menu_rock.png" id="3_ca81e"]
+[ext_resource type="Texture2D" uid="uid://dfokmo0vhj8k1" path="res://Assets/UI/water_btn.png" id="5_8jp5f"]
+
+[node name="HUD" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j2j1p")
+
+[node name="CanvasGroup" type="CanvasLayer" parent="."]
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasGroup"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -253.0
+offset_top = 29.0
+offset_right = -29.0
+offset_bottom = 57.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.490196, 0.513726, 0.486275, 1)
+theme_override_colors/font_shadow_color = Color(0.796078, 0.309804, 0.372549, 1)
+theme_override_colors/font_outline_color = Color(1, 0.815686, 0.827451, 1)
+value = 50.0
+show_percentage = false
+
+[node name="energy_compile" type="ProgressBar" parent="CanvasGroup"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -1135.0
+offset_top = 926.0
+offset_right = -767.0
+offset_bottom = 961.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.490196, 0.513726, 0.486275, 1)
+theme_override_colors/font_shadow_color = Color(0.796078, 0.309804, 0.372549, 1)
+theme_override_colors/font_outline_color = Color(1, 0.815686, 0.827451, 1)
+max_value = 1.0
+value = 1.0
+show_percentage = false
+
+[node name="pause_btn" type="Button" parent="CanvasGroup"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -46.5
+offset_right = 46.5
+offset_bottom = 89.0
+grow_horizontal = 2
+tooltip_text = "pause"
+theme_override_colors/icon_hover_color = Color(0.607339, 0.714753, 0.976884, 0.470588)
+icon = ExtResource("2_1m1og")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="Panel" type="Panel" parent="CanvasGroup"]
+visible = false
+self_modulate = Color(0.831373, 0.760784, 0.788235, 0.615686)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="menu_pause" type="Sprite2D" parent="CanvasGroup/Panel"]
+position = Vector2(854, 479)
+scale = Vector2(2, 2)
+texture = ExtResource("3_ca81e")
+
+[node name="Label" type="Label" parent="CanvasGroup/Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.489
+anchor_top = 0.273
+anchor_right = 0.489
+anchor_bottom = 0.273
+offset_left = -585.736
+offset_top = -276.975
+offset_right = -415.736
+offset_bottom = -250.975
+grow_horizontal = 2
+grow_vertical = 2
+text = "The Game is on pause"
+
+[node name="continue_btn" type="Button" parent="CanvasGroup/Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.492
+anchor_top = 0.417
+anchor_right = 0.492
+anchor_bottom = 0.417
+offset_left = -155.784
+offset_top = -79.216
+offset_right = 186.216
+offset_bottom = 84.784
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_hover_pressed_color = Color(0.716296, 0.716296, 0.716296, 1)
+theme_override_font_sizes/font_size = 40
+toggle_mode = true
+text = "Continue"
+icon = ExtResource("5_8jp5f")
+flat = true
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="reload_btn" type="Button" parent="CanvasGroup/Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.509
+anchor_top = 0.675
+anchor_right = 0.509
+anchor_bottom = 0.675
+offset_left = -181.368
+offset_top = -92.4
+offset_right = 166.632
+offset_bottom = 56.6
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "reload level"
+icon = ExtResource("5_8jp5f")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[connection signal="pressed" from="CanvasGroup/pause_btn" to="." method="_on_pause_btn_pressed"]
+[connection signal="pressed" from="CanvasGroup/Panel/continue_btn" to="." method="_on_continue_btn_pressed"]
+[connection signal="pressed" from="CanvasGroup/Panel/reload_btn" to="." method="_on_reload_btn_pressed"]

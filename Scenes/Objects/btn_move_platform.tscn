@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3 uid="uid://gf1qyir5prm"]
+
+[ext_resource type="Texture2D" uid="uid://dt3rr26j5wt88" path="res://Assets/sprite-sheets/not_pushed.png" id="1_e27vr"]
+[ext_resource type="Texture2D" uid="uid://bjuej4gxl8uaw" path="res://Assets/sprite-sheets/pushed.png" id="2_bfy5p"]
+
+[sub_resource type="GDScript" id="GDScript_bvr7f"]
+script/source = "extends Area2D
+
+var cube_on : bool = false
+@export var gate : StaticBody2D
+@onready var animated_sprite_2d = $AnimatedSprite2D
+
+func _ready():
+	animated_sprite_2d.play(\"not_pushed\")
+
+func _on_body_entered(body):
+	if body.is_in_group(\"portble\"):
+		if !cube_on:
+			gate.is_open = true
+			animated_sprite_2d.play(\"pushed\")
+		if body.is_in_group(\"rigid\"):
+			cube_on = true
+
+
+func _on_body_exited(body):
+	if !cube_on and !body.is_in_group(\"rigid\"):
+		gate.is_open = false
+		animated_sprite_2d.play(\"not_pushed\")
+	elif body.is_in_group(\"rigid\"):
+		cube_on = false
+		gate.is_open = false
+		animated_sprite_2d.play(\"not_pushed\")
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f3x6p"]
+size = Vector2(49, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l5unf"]
+atlas = ExtResource("1_e27vr")
+region = Rect2(0, 241, 512, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jhbk3"]
+atlas = ExtResource("2_bfy5p")
+region = Rect2(0, 241, 512, 241)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gtbio"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l5unf")
+}],
+"loop": true,
+"name": &"not_pushed",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jhbk3")
+}],
+"loop": true,
+"name": &"pushed",
+"speed": 5.0
+}]
+
+[node name="btn_move_platform" type="Area2D"]
+collision_layer = 2
+collision_mask = 6
+script = SubResource("GDScript_bvr7f")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 3)
+shape = SubResource("RectangleShape2D_f3x6p")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0.499996, 0.437499)
+scale = Vector2(0.236328, 0.169606)
+sprite_frames = SubResource("SpriteFrames_gtbio")
+animation = &"not_pushed"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

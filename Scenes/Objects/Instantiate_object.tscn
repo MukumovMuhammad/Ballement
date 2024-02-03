@@ -1,0 +1,62 @@
+[gd_scene load_steps=3 format=3 uid="uid://bb0y25t6pa0c1"]
+
+[sub_resource type="GDScript" id="GDScript_adhcf"]
+script/source = "extends Area2D
+
+var Player_in : bool = false 
+@export var preload_object : PackedScene
+@export var at_state : String
+var object
+@export var Default_pos : Vector2
+
+func _ready():
+	object = preload_object.instantiate()
+
+func Create_one():
+	object = preload_object.instantiate()
+	object.global_position = Default_pos 
+	object.first_state = at_state
+	print(object.position)
+	get_node(\"../\").add_child(object)
+
+
+func _on_body_entered(body):
+	if body.name == \"Player\":
+		Player_in = true
+
+
+func _on_body_exited(body):
+	if body.name == \"Player\":
+		Player_in = false
+
+
+func command():
+	if Player_in:
+		object.queue_free()
+		Create_one()
+
+
+func get_command():
+	return \"Press G\"
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m8hm6"]
+size = Vector2(62, 44)
+
+[node name="Instantiate_object" type="Area2D" groups=["button", "g_command"]]
+position = Vector2(-1, 1)
+script = SubResource("GDScript_adhcf")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = -32.0
+offset_top = -22.0
+offset_right = 30.0
+offset_bottom = 21.0
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -1)
+shape = SubResource("RectangleShape2D_m8hm6")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

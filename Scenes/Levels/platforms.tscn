@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://befrikgvld3q1"]
+
+[ext_resource type="TileSet" uid="uid://b7p1oda6n525r" path="res://Scenes/Levels/default.tres" id="1_rkopm"]
+
+[node name="Platforms" type="TileMap"]
+scale = Vector2(3, 3)
+tile_set = ExtResource("1_rkopm")
+format = 2
+layer_1/name = ""
+layer_1/enabled = true
+layer_1/modulate = Color(1, 1, 1, 1)
+layer_1/y_sort_enabled = false
+layer_1/y_sort_origin = 0
+layer_1/z_index = 0
+layer_1/tile_data = PackedInt32Array()
+layer_2/name = ""
+layer_2/enabled = true
+layer_2/modulate = Color(1, 1, 1, 1)
+layer_2/y_sort_enabled = false
+layer_2/y_sort_origin = 0
+layer_2/z_index = 0
+layer_2/tile_data = PackedInt32Array()

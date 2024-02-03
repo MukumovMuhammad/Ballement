@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://dc4r34xmq7fh6"]
+
+[ext_resource type="Script" path="res://Scenes/Player/trail.gd" id="1_hotb5"]
+
+[sub_resource type="Curve" id="Curve_07xt1"]
+_data = [Vector2(0, 1), 0.0, 4.03759, 0, 0, Vector2(0.495968, 0.989474), 0.0, 0.0, 0, 0, Vector2(0.99999, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0315789), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[node name="Trail" type="Line2D"]
+position = Vector2(-917, -145)
+scale = Vector2(1.01649, 1.17778)
+points = PackedVector2Array(1117, 125, 873.018, 127.741, 672, 130)
+width = 20.0
+width_curve = SubResource("Curve_07xt1")
+default_color = Color(0.764706, 0, 0.0862745, 1)
+script = ExtResource("1_hotb5")
