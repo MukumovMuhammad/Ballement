@@ -182,7 +182,7 @@ scale = Vector2(2, 2)
 gate = NodePath("../gate-2")
 
 [node name="open-3" parent="Gates" node_paths=PackedStringArray("gate") instance=ExtResource("8_1a4xx")]
-position = Vector2(9325, 257)
+position = Vector2(9312, 400)
 scale = Vector2(2, 2)
 gate = NodePath("../gate-3")
 

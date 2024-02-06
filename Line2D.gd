@@ -1,6 +1,9 @@
 extends Line2D
 @onready var timer = $Timer
-
+@onready var small_timer = $small_timer
+var has_done : bool = false
+func _ready():
+	self.global_position = Vector2.ZERO
 
 func appear(start_point: Vector2, end_point : Vector2) -> void:
 	print_debug(" Positions that appear method recieves  " , start_point, end_point)
@@ -15,4 +18,19 @@ func disappear() -> void:
 
 
 func _on_timer_timeout():
+	disappear()
+
+func temp_show(start_point: Vector2, end_point : Vector2) -> void:
+	if !has_done:
+		add_point(start_point)
+		add_point(end_point)
+		has_done = true
+	add_point(start_point)
+	add_point(end_point)
+	if get_point_count() > 2:
+		clear_points()
+	#small_timer.start()
+
+
+func _on_small_timer_timeout():
 	disappear()

@@ -84,6 +84,8 @@ func _physics_process(delta):
 	move_and_slide()
 	if compiling:
 		super_power_time = energy_timer.time_left
+		mouse_pos = get_global_mouse_position()
+		line_2d.temp_show(self.position, True_distance(self.global_position, mouse_pos))
 
 func _process(delta):
 	Getting_collide_name()
@@ -107,6 +109,7 @@ func _process(delta):
 			energy_timer.wait_time = 1
 			print("The time just left is ", energy_timer.wait_time)
 			power_compile.emit(false)
+			line_2d.disappear()
 	if Input.is_action_just_released("super_power") and compile_ready:
 			Super_power(state.current_state)
 	
@@ -191,9 +194,15 @@ func Super_power(_state):
 	compile_ready = false
 	if _state == "fire":
 		mouse_pos = get_global_mouse_position()
-		line_2d.appear(self.position, mouse_pos)
+	
 		print_debug("Here it is a global positions of  player " , self.position, mouse_pos)
-		self.global_position = mouse_pos
+		
+		### The calculations when The Player will Teleport but with conditions  
+		var The_distance : Vector2 = True_distance(self.global_position, mouse_pos)
+		
+		line_2d.appear(self.position, The_distance)
+		self.global_position = The_distance
+			
 		
 		
 		to_default_state()
@@ -259,6 +268,30 @@ func go_up():
 	elif going_up and (state.current_state != "earth"):
 		velocity.y = Veclociting_wind.y / Weights[state.current_state]
 
+
+func True_distance(player_pos : Vector2, _mouse_pos : Vector2):
+	var To_move_pos : Vector2  = Vector2(400, 300)
+	var dis = player_pos - _mouse_pos
+
+	# Calculate the distance for each axis separately
+	var abs_dis_x = abs(dis.x)
+	var abs_dis_y = abs(dis.y)
+
+	# Check if teleport distance is not too far
+	if abs_dis_x < To_move_pos.x and abs_dis_y < To_move_pos.y:
+		return _mouse_pos
+	else:
+		# If it is too far, limit the teleportation distance
+		# Adjust the x-axis
+		if abs_dis_x > To_move_pos.x:
+			dis.x = sign(dis.x) * To_move_pos.x
+
+		# Adjust the y-axis
+		if abs_dis_y > To_move_pos.y:
+			dis.y = sign(dis.y) * To_move_pos.y
+
+		return player_pos - dis
+
 ####################  TIME OUTS   ####################
 
 #dashes
@@ -271,7 +304,8 @@ func _on_dashing_cooldown_timeout():
 
 #ability
 func _on_ability_timer_timeout():
-	to_default_state()
+	if !compiling and !compile_ready:
+		to_default_state()
 
 #Coyote timer 
 func _on_coyote_timer_timeout():

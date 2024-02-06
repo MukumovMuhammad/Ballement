@@ -10,4 +10,8 @@ script = ExtResource("1_w3h2v")
 wait_time = 0.08
 one_shot = true
 
+[node name="small_timer" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="small_timer" to="." method="_on_small_timer_timeout"]
