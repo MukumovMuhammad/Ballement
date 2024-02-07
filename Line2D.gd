@@ -2,6 +2,9 @@ extends Line2D
 @onready var timer = $Timer
 @onready var small_timer = $small_timer
 var has_done : bool = false
+
+var Points : Array
+
 func _ready():
 	self.global_position = Vector2.ZERO
 
@@ -25,10 +28,12 @@ func temp_show(start_point: Vector2, end_point : Vector2) -> void:
 		add_point(start_point)
 		add_point(end_point)
 		has_done = true
+	
 	add_point(start_point)
 	add_point(end_point)
 	if get_point_count() > 2:
-		clear_points()
+		remove_point(2)
+		remove_point(3)
 	#small_timer.start()
 
 

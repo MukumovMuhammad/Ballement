@@ -85,7 +85,8 @@ func _physics_process(delta):
 	if compiling:
 		super_power_time = energy_timer.time_left
 		mouse_pos = get_global_mouse_position()
-		line_2d.temp_show(self.position, True_distance(self.global_position, mouse_pos))
+		#line_2d.temp_show(self.position, True_distance(self.global_position, mouse_pos))
+		$Dot.global_position = True_distance(self.global_position, mouse_pos)
 
 func _process(delta):
 	Getting_collide_name()
@@ -97,7 +98,15 @@ func _process(delta):
 				anim.rotate(5)
 			else:
 				anim.rotate(5/100)
+			if state.current_state == "fire":
+				super_power_time = energy_timer.time_left
+				mouse_pos = get_global_mouse_position()
+				#line_2d.temp_show(self.position, True_distance(self.global_position, mouse_pos))
+				$Dot.global_position = True_distance(self.global_position, mouse_pos)
+			
+
 			if energy_timer.is_stopped() and !compile_ready:
+				$Dot.show()
 				self.velocity = Vector2.ZERO
 				energy_timer.start()
 				compiling = true
@@ -110,7 +119,9 @@ func _process(delta):
 			print("The time just left is ", energy_timer.wait_time)
 			power_compile.emit(false)
 			line_2d.disappear()
+			$Dot.hide()
 	if Input.is_action_just_released("super_power") and compile_ready:
+			$Dot.hide()
 			Super_power(state.current_state)
 	
 
@@ -215,12 +226,13 @@ func to_default_state():
 	state.Change_state(0)
 	anim.play(state.current_state)
 	State_changed.emit(state.current_state)
-	spray.Object_changed_state(state.current_state)
+	
 	Power_active = false
 	set_collision_mask_value(4, true)
 	var _scale = Scales[state.current_state]
 	anim.scale = Vector2(_scale,_scale)
 	anim.position = anim_pos[state.current_state]
+	spray.Object_changed_state(state.current_state)
 	#line_2d.disappear()
 #Moving ather objects
 func Moving_rig_body():

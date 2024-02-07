@@ -27,11 +27,13 @@ var Life_time = {
 	\"earth\" : 0.5
 }
 
+
+
 func Change_behavour(state):
+	self.one_shot = false
 	self.process_material.set(\"color\" , colors[state])
 	self.process_material.set(\"direction\", directions[state])
 	self.lifetime = Life_time[state]
-	
 
 
 
@@ -42,6 +44,17 @@ func Object_changed_state(_state):
 		Change_behavour(_state)
 	else:
 		emitting = false
+
+
+func Boom_effect(_state):
+	self.one_shot = true
+	local_coords = false
+	self.lifetime = 0.5
+	self.process_material.set(\"direction\", Vector3(1,0,0))
+	self.process_material.set(\"spread\" , 180.0)
+	self.process_material.set(\"gravity\", Vector3(0,0,0))
+	self.process_material.set(\"initial_velocity_min\", 500)
+	self.amount = 50
 "
 
 [node name="spray" type="GPUParticles2D"]
