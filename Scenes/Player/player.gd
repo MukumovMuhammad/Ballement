@@ -27,6 +27,7 @@ var compile_ready : bool = false
 @export var line_2d : Line2D
 
 @export_category("Player physics")
+@export var the_max_distance : float = 400.0
 @export var coyote_frames = 6
 @export var Weights = {"simple" : 4, "water" : 4.2, "fire" : 3.8, "earth" : 5}
 @export var Push_forse = {"simple" : 10.0,"water" : 10.0,"fire" : 5.0, "earth" : 30.0}
@@ -86,7 +87,7 @@ func _physics_process(delta):
 		super_power_time = energy_timer.time_left
 		mouse_pos = get_global_mouse_position()
 		#line_2d.temp_show(self.position, True_distance(self.global_position, mouse_pos))
-		$Dot.global_position = True_distance(self.global_position, mouse_pos)
+		$Dot.global_position = teleport_distance(self.global_position, mouse_pos)
 
 func _process(delta):
 	Getting_collide_name()
@@ -102,7 +103,7 @@ func _process(delta):
 				super_power_time = energy_timer.time_left
 				mouse_pos = get_global_mouse_position()
 				#line_2d.temp_show(self.position, True_distance(self.global_position, mouse_pos))
-				$Dot.global_position = True_distance(self.global_position, mouse_pos)
+				$Dot.global_position = teleport_distance(self.global_position, mouse_pos)
 			
 
 			if energy_timer.is_stopped() and !compile_ready:
@@ -209,7 +210,7 @@ func Super_power(_state):
 		print_debug("Here it is a global positions of  player " , self.position, mouse_pos)
 		
 		### The calculations when The Player will Teleport but with conditions  
-		var The_distance : Vector2 = True_distance(self.global_position, mouse_pos)
+		var The_distance : Vector2 = teleport_distance(self.global_position, mouse_pos)
 		
 		line_2d.appear(self.position, The_distance)
 		self.global_position = The_distance
@@ -280,29 +281,22 @@ func go_up():
 	elif going_up and (state.current_state != "earth"):
 		velocity.y = Veclociting_wind.y / Weights[state.current_state]
 
-
-func True_distance(player_pos : Vector2, _mouse_pos : Vector2):
-	var To_move_pos : Vector2  = Vector2(400, 300)
-	var dis = player_pos - _mouse_pos
-
-	# Calculate the distance for each axis separately
-	var abs_dis_x = abs(dis.x)
-	var abs_dis_y = abs(dis.y)
-
-	# Check if teleport distance is not too far
-	if abs_dis_x < To_move_pos.x and abs_dis_y < To_move_pos.y:
-		return _mouse_pos
-	else:
-		# If it is too far, limit the teleportation distance
-		# Adjust the x-axis
-		if abs_dis_x > To_move_pos.x:
-			dis.x = sign(dis.x) * To_move_pos.x
-
-		# Adjust the y-axis
-		if abs_dis_y > To_move_pos.y:
-			dis.y = sign(dis.y) * To_move_pos.y
-
-		return player_pos - dis
+"""
+ the distance of between two points and 
+if it is larger then the given max distance 
+it returns a new pos with the_max_distance
+"""
+func teleport_distance(pos1 : Vector2, pos2 : Vector2): 
+	# a distance
+	var _dis = sqrt(pow(pos2.x - pos1.x,2) + pow(pos2.y - pos1.y,2))
+	var pos := pos2
+	
+	if _dis > the_max_distance:
+		pos.x = pos1.x + (the_max_distance * (pos2.x - pos1.x))/_dis
+		pos.y = pos1.y + (the_max_distance * (pos2.y - pos1.y))/_dis
+	
+	
+	return pos
 
 ####################  TIME OUTS   ####################
 
